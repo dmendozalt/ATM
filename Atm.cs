@@ -22,26 +22,44 @@ namespace ATM
             Console.WriteLine("**** BIENVENIDO ****");
             Console.WriteLine("Ingrese su numero de identificacion: ");
             int searchIdentification = int.Parse(Console.ReadLine());
-            User user = users[searchIdentification];
-            Console.WriteLine("Ingrese su contraseña: ");
-            ushort guessPassword = ushort.Parse(Console.ReadLine());
-            if (guessPassword == user.Password)
+            if (users.ContainsKey(searchIdentification))
             {
-                Console.Clear();
-                Console.WriteLine($"**** BIENVENIDO {user.Name.ToUpper()} ****");
-                Console.WriteLine("**** CUENTAS ****");
-                Console.WriteLine("Seleccione la cuenta por su indice");
-                user.ShowAccounts();
-                Console.Write("Opcion: ");
-                int accountIndex =int.Parse(Console.ReadLine());
-                Account account = user.Accounts[accountIndex];
-                ShowMenu(account,user);
+                User user = users[searchIdentification];
+                Console.WriteLine("Ingrese su contraseña: ");
+                ushort guessPassword = ushort.Parse(Console.ReadLine());
+                if (guessPassword == user.Password)
+                {
+                    Console.Clear();
+                    Console.WriteLine($"**** BIENVENIDO {user.Name.ToUpper()} ****");
+                    Console.WriteLine("**** CUENTAS ****");
+                    Console.WriteLine("Seleccione la cuenta por su indice");
+                    user.ShowAccounts();
+                    Console.Write("Opcion: ");
+                    int accountIndex = int.Parse(Console.ReadLine());
+                    if (user.Accounts.ContainsKey(accountIndex))
+                    {
+                        Account account = user.Accounts[accountIndex];
+                        ShowMenu(account, user);
+                    }
+                    else
+                    {
+                        Console.Clear();
+                        Console.WriteLine("Cuenta no encontrada");
+                    }
+                }
+                else
+                {
+                    Console.Clear();
+                    Console.WriteLine("Contraseña incorrecta");
+                }
             }
             else
             {
                 Console.Clear();
-                Console.WriteLine("Contraseña incorrecta");
+                Console.WriteLine("Usuario no encontrado");
             }
+
+            
         }
 
         public static void ShowMenu(Account account,User user)
